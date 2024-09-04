@@ -25,9 +25,8 @@ router.get('/:id', verifyToken, async(req,res)=> {
 router.put('/addUser', async(req,res)=> {
     try{
         const users = await addUser(req.body);
-        res.json(users);
+        res.json({"success":"user added successfully"});
     }catch(err){
-        console.log(err)
         res.status(500).send({"error":"internal server error"})
     }
 })
@@ -44,7 +43,7 @@ router.put('/:id', verifyToken, async(req,res)=> {
 router.delete('/delete/:id', verifyToken, async(req,res)=> {
     try{
         const users = await deleteUser(req.params.id);
-        res.json(users);
+        res.json({"success":"User Deleted Successfully"});
     }catch(err){
         res.status(500).send({"error":"Internal server error"})
     }

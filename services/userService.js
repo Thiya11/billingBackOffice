@@ -1,6 +1,6 @@
 const { dbConnection } = require("../db/db-connect");
 const { userQueries } = require("../queries/users");
-const { signToken } = require("../routes/middleware");
+const { signToken, hashify } = require("../routes/middleware");
 const { convertObjectToArr } = require("./commonService");
 const jwtDecode = require('jwt-decode');
 const bcrypt = require('bcrypt');
@@ -17,18 +17,10 @@ async function getUsersById(id) {
 }
 
 async function addUser(reqObj) {
-    bcrypt.hash(reqObj['password'], Number(process.env.PASSWORD_SALT), (err,hash)=> {
-        if(err) {
-            console.log('Something went wrong',err);
-            return false;
-        } else {
-            reqObj['password'] = hash;
-            console.log(reqObj)
-            const rows   = dbConnection.query(userQueries.insertUser,convertObjectToArr(reqObj));
-            return rows;
-        }
-    })
-   
+    const encryptedPassword = await bcrypt.hash(reqObj['password'],Number(process.env.PASSWORD_SALT));
+    reqObj['password']      = encryptedPassword;
+    const rows              = await dbConnection.query(userQueries.insertUser,convertObjectToArr(reqObj));
+    return rows;  
 }
 
 async function updateUser(reqObj, id) {
@@ -42,7 +34,6 @@ async function deleteUser(id) {
 }
 
 async function loginUser(reqObj,res) {
-    console.log(reqObj)
     if(reqObj.type == 'gmail') {
         const data = jwtDecode.jwtDecode(reqObj.token);
         res.json(data);
