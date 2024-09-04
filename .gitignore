@@ -3,3 +3,6 @@
 
 #environment files
 .env
+
+#private keys
+/keys
