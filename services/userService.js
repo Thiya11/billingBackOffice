@@ -1,6 +1,6 @@
 const { dbConnection } = require("../db/db-connect");
 const { userQueries } = require("../queries/users");
-const { signToken, hashify } = require("../routes/middleware");
+const { signToken, hashify, createHash } = require("../routes/middleware");
 const { convertObjectToArr } = require("./commonService");
 const jwtDecode = require('jwt-decode');
 const bcrypt = require('bcrypt');
@@ -17,7 +17,7 @@ async function getUsersById(id) {
 }
 
 async function addUser(reqObj) {
-    const encryptedPassword = await bcrypt.hash(reqObj['password'],Number(process.env.PASSWORD_SALT));
+    const encryptedPassword = await createHash(reqObj['password']);
     reqObj['password']      = encryptedPassword;
     const rows              = await dbConnection.query(userQueries.insertUser,convertObjectToArr(reqObj));
     return rows;  
