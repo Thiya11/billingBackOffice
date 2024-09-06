@@ -1,6 +1,7 @@
-const fs   = require('fs');
-const jwt  = require('jsonwebtoken');
-const path = require('path');
+const fs     = require('fs');
+const jwt    = require('jsonwebtoken');
+const path   = require('path');
+const bcrypt = require('bcrypt');
 
 const privateKey = fs.readFileSync(path.join(__dirname,'..','keys','rsa.key'),'utf-8');
 const publicKey  = fs.readFileSync(path.join(__dirname,'..','keys','rsa.key.pub'),'utf-8');
@@ -29,7 +30,14 @@ const verifyToken = (req, res, next) => {
     }
 }
 
+const createHash = async (pass) => {
+    console.log(process.env.PASSWORD_SALT, pass)
+    const encryptedHash = await bcrypt.hash(pass, Number(process.env.PASSWORD_SALT));
+    return encryptedHash;
+}
+
 module.exports = {
     signToken,
-    verifyToken
+    verifyToken,
+    createHash
 }
