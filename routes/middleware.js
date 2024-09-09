@@ -31,13 +31,71 @@ const verifyToken = (req, res, next) => {
 }
 
 const createHash = async (pass) => {
-    console.log(process.env.PASSWORD_SALT, pass)
     const encryptedHash = await bcrypt.hash(pass, Number(process.env.PASSWORD_SALT));
     return encryptedHash;
 }
 
+const convertIncomingFields = (req,res,next) => {
+    if(req.body) {
+        req.body = convertToKabobCase(req.body);
+    }
+    next();
+}
+
+const convertToKabobCase = (data) => {
+    const newObj = {};
+    Object.keys(data).forEach(key => {
+        const newKey   = key.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+        newObj[newKey] = data[key];
+    });
+    return newObj;
+} 
+
+const stringify = (obj) => {
+    if(typeof obj == 'string') {
+        try {
+           obj = JSON.parse(obj);
+           return obj;
+        } catch(err) {
+            return obj;
+        }
+    }
+    return obj;
+}
+
+const convertOutgoingFields = (req,res,next) => {
+    const oldSend = res.send;
+    res.send = (data) => {
+        data = stringify(data);
+        if (Array.isArray(data)) {
+            data = data.map((item) => convertToCamelCase(item));
+        } else if (typeof data == 'object') {
+            data = convertToCamelCase(data);
+        }
+        oldSend.call(res, JSON.stringify(data));
+    };
+    next();
+}
+
+const convertToCamelCase = (data) => {
+    const newObj = {};
+    Object.keys(data).forEach(key => {
+        const newKey   =   key.toLowerCase().replace(/([-_][a-z])/g, group =>
+            group
+              .toUpperCase()
+              .replace('-', '')
+              .replace('_', '')
+          );
+        newObj[newKey] = data[key];
+    });
+    return newObj;
+}
+
+
 module.exports = {
     signToken,
     verifyToken,
-    createHash
+    createHash,
+    convertIncomingFields,
+    convertOutgoingFields
 }

@@ -2,12 +2,11 @@ const express = require('express');
 const { getAllRoles, addRole, updateRole, deleteRole } = require('../services/roleService');
 const router = express.Router();
 const {verifyToken} = require('./middleware');
-const { multiSwagObj } = require('../services/swagger');
 
 router.get('/', verifyToken, async(req,res)=> {
     try{
         const roles = await getAllRoles();
-        res.json(multiSwagObj(roles))
+        res.json(roles);
     }catch(err){
         console.log(err)
         res.status(500).send({"error":"Internal Server Error"})

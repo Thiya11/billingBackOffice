@@ -4,7 +4,6 @@ const { signToken, hashify, createHash } = require("../routes/middleware");
 const { convertObjectToArr } = require("./commonService");
 const jwtDecode = require('jwt-decode');
 const bcrypt = require('bcrypt');
-const { singleSwagObj } = require("./swagger");
 
 async function getAllUsers() {
     const [rows] = await dbConnection.execute(userQueries.getAllUsers);
@@ -56,7 +55,7 @@ async function loginUser(reqObj,res) {
                     if (jwtToken.error) {
                         res.status(404).send({"error":"Unable to Process your request"})
                     }else {
-                        res.json({"success":{"userId":data[0].id, "token":jwtToken}});
+                        res.json({"userId":data[0].id, "token":jwtToken});
                     }
                 } else {
                     res.status(404).send({"error":"Invalid Email or Password"});

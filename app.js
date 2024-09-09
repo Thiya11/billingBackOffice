@@ -3,15 +3,22 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app     = express();
 const cors    = require('cors');
-
-app.use(cors({origin:'http://localhost:4200'}))
-app.use(bodyParser.json())
+app.use(cors({origin:'http://localhost:4200'}));
+app.use(bodyParser.json());
 const userRoutes = require('./routes/userRoutes');
 const roleRoutes = require('./routes/roleRoutes');
+const inventoryRoutes = require('./routes/inventory');
 const { registerNewUser } = require('./services/miscellaneous');
+const { convertIncomingFields, convertOutgoingFields } = require('./routes/middleware');
 
-app.use('/users',userRoutes)
-app.use('/roles',roleRoutes)
+//added middlewares
+app.use(convertIncomingFields);
+app.use(convertOutgoingFields);
+
+//added custom routes
+app.use('/users',userRoutes);
+app.use('/roles',roleRoutes);
+app.use('/inventory', inventoryRoutes);
 
 app.post('/register', async (req,res)=> {
    try{
