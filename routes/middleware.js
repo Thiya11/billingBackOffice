@@ -67,7 +67,9 @@ const convertOutgoingFields = (req,res,next) => {
     const oldSend = res.send;
     res.send = (data) => {
         data = stringify(data);
+
         if (Array.isArray(data)) {
+            console.log(data, 'arr')
             data = data.map((item) => convertToCamelCase(item));
         } else if (typeof data == 'object') {
             data = convertToCamelCase(data);
@@ -80,6 +82,14 @@ const convertOutgoingFields = (req,res,next) => {
 const convertToCamelCase = (data) => {
     const newObj = {};
     Object.keys(data).forEach(key => {
+        if (Array.isArray(data[key])) {
+            let tempArr = [];
+            data[key].forEach(item => {
+               let tempObj = convertToCamelCase(item);
+               tempArr.push(tempObj);
+            })
+            data[key] = tempArr;
+        }
         const newKey   =   key.toLowerCase().replace(/([-_][a-z])/g, group =>
             group
               .toUpperCase()
@@ -92,10 +102,17 @@ const convertToCamelCase = (data) => {
 }
 
 
+const errorHandler = (err, req, res, next) => {
+    res.status(err.status || 500);
+    res.json({error: err.message || 'Something went wrong'});
+}
+
 module.exports = {
     signToken,
     verifyToken,
     createHash,
     convertIncomingFields,
-    convertOutgoingFields
+    convertOutgoingFields,
+    convertToKabobCase,
+    errorHandler
 }

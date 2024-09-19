@@ -35,7 +35,7 @@ async function deleteUser(id) {
 async function loginUser(reqObj,res) {
     if(reqObj.type == 'gmail') {
         const data = jwtDecode.jwtDecode(reqObj.token);
-        res.json(data);
+        res.json({"success":data});
     } else {
         const [data]  = await dbConnection.query(userQueries.userLogin,[reqObj.email]);
         if (data.length <= 0) {

@@ -6,7 +6,7 @@ const {verifyToken} = require('./middleware');
 router.get('/', verifyToken, async(req,res)=> {
     try{
         const roles = await getAllRoles();
-        res.json(roles);
+        res.json({"success":roles});
     }catch(err){
         console.log(err)
         res.status(500).send({"error":"Internal Server Error"})

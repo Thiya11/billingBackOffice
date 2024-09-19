@@ -5,7 +5,7 @@ const router = require('express').Router();
 router.get('/', async (req,res)=> {
    try {
       const allData = await getAllInventory();
-      res.status(200).send(allData);
+      res.status(200).send({"success": allData});
    } catch (err) {
       res.status(404).send({"error":"Unable to get all the inventories"});
    }
