@@ -1,13 +1,12 @@
 const express = require('express');
 const { getAllUsers, getUsersById, addUser, updateUser, deleteUser, loginUser } = require('../services/userService');
 const { verifyToken } = require('./middleware');
-const { singleSwagObj, multiSwagObj } = require('../services/swagger');
 const router = express.Router();
 
 router.get('/', verifyToken, async(req,res)=> {
     try{
         const users = await getAllUsers();
-        res.json(multiSwagObj(users));
+        res.status(200).send({"success":users});
     }catch(err){
         res.status(500).send({"error":"internal server error"})
     }
@@ -16,7 +15,10 @@ router.get('/', verifyToken, async(req,res)=> {
 router.get('/:id', verifyToken, async(req,res)=> {
     try{
         const users = await getUsersById(req.params.id);
-        res.json({"success":singleSwagObj(users[0])});
+        if (Object.entries(users[0]).length < 1) {
+            res.status(404).send({"error":"Unable to get the user details"})
+        }
+        res.status(200).send({"success" : users[0]});
     }catch(err){
         res.status(500).send({"error":"internal server error"})
     }
