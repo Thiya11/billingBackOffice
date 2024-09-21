@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/', verifyToken, async(req,res)=> {
     try{
         const users = await getAllUsers();
-        res.status(200).send({"success":users});
+        res.status(200).json({"success":users});
     }catch(err){
         res.status(500).send({"error":"internal server error"})
     }
