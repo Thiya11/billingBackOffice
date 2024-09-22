@@ -3,7 +3,7 @@ const { InventoryQueris } = require("../queries/operation-quries");
 const { convertObjectToArr } = require("./commonService");
 
 const addIniventory = async (reqObj) => {
-   const row = await dbConnection.query(InventoryQueris.insertInventory, convertObjectToArr(reqObj));
+   const row = await dbConnection.query(InventoryQueris.insertInventory, [reqObj.item_name, reqObj.price_per_item, reqObj.taxes, reqObj.quantity_type, reqObj.quantity_remaining]);
    return row[0].insertId;
 }
 

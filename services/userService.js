@@ -55,7 +55,7 @@ async function loginUser(reqObj,res) {
                     if (jwtToken.error) {
                         res.status(404).send({"error":"Unable to Process your request"})
                     }else {
-                        res.json({"userId":data[0].id, "token":jwtToken});
+                        res.json({"success":{"userId":data[0].id, "token":jwtToken}});
                     }
                 } else {
                     res.status(404).send({"error":"Invalid Email or Password"});
