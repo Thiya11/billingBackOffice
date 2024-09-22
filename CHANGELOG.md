@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Removed
 - Removed swagger implementation.
-**Note:** Versions jumped between 0.0.3 and 0.0.9 in favour of multiple New feature addition in the application.
+**Note:** Versions progressed from 0.0.2 to 0.1.0, incorporating multiple new features into the application.
 
 ## [0.0.2] - 2024-09-06
 ### Added
