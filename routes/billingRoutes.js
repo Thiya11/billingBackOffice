@@ -28,10 +28,9 @@ router.post('/add', async (req,res) => {
         if (row?.message) {
             res.status(404).send({"error":row.message});
         }
-        res.status(200).send({"success":"Bill added successfully"});
+        res.status(200).send({"success":{"message":"Bill added successfully", "billId":row[0].insertId}})
     }
     catch(err) {
-
         let error = err.custom ? err.custom : {"error":"Unable to add bill"};
         res.status(404).send(error);
     }

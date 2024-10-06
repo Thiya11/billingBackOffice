@@ -20,7 +20,7 @@ const addNewBill = async (reqObj, res) => {
         const conditionCase        = reqObj.purchased_items.map((item) => `WHEN item_id = ${item.itemId} THEN ${item.quantity}`).join(" ");
         const updateInventoryItems = await dbConnection.query( `UPDATE inventory SET quantity_remaining = CASE ${quantityCase} END WHERE item_id IN (${itemIds.join(', ')}) AND quantity_remaining >= CASE ${conditionCase} END;`)
         const insertedItems        = await dbConnection.query(billingQueries.insertPurchasedItems + values);
-        return insertedItems;
+        return billData;
     }
 }
 

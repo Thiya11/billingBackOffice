@@ -3,7 +3,7 @@ const { InventoryQueris } = require("../queries/operation-quries");
 const { convertObjectToArr } = require("./commonService");
 
 const addIniventory = async (reqObj) => {
-   const row = await dbConnection.query(InventoryQueris.insertInventory, [reqObj.item_name, reqObj.price_per_item, reqObj.taxes, reqObj.quantity_type, reqObj.quantity_remaining]);
+   const row = await dbConnection.query(InventoryQueris.insertInventory, [reqObj.item_name, reqObj.category, reqObj.price_per_item, reqObj.taxes, reqObj.quantity_type, reqObj.quantity_remaining]);
    return row[0].insertId;
 }
 
@@ -13,7 +13,7 @@ const getAllInventory = async () => {
 }
 
 const updateInventoryById = async (reqObj, id) => {
-    const row = await dbConnection.query(InventoryQueris.updateInventory, [...convertObjectToArr(reqObj), id]);
+    const row = await dbConnection.query(InventoryQueris.updateInventory, [reqObj.item_name, reqObj.category, reqObj.price_per_item, reqObj.taxes, reqObj.quantity_type, reqObj.quantity_remaining, id]);
     return row[0].insertId;
 }
 
