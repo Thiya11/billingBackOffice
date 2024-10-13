@@ -9,6 +9,7 @@ const userRoutes = require('./routes/userRoutes');
 const roleRoutes = require('./routes/roleRoutes');
 const inventoryRoutes = require('./routes/inventory');
 const billingRoutes = require('./routes/billingRoutes');
+const transactionRoutes = require('./routes/transactionRoutes');
 const { registerNewUser } = require('./services/miscellaneous');
 const { convertIncomingFields, convertOutgoingFields, errorHandler } = require('./routes/middleware');
 
@@ -24,6 +25,7 @@ app.use('/users',userRoutes);
 app.use('/roles',roleRoutes);
 app.use('/inventory', inventoryRoutes);
 app.use('/billing', billingRoutes);
+app.use('/transactions',transactionRoutes);
 
 //register new user API
 
