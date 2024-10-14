@@ -69,7 +69,6 @@ const convertOutgoingFields = (req,res,next) => {
         data = stringify(data);
 
         if (Array.isArray(data)) {
-            console.log(data, 'arr')
             data = data.map((item) => convertToCamelCase(item));
         } else if (typeof data == 'object') {
             data = convertToCamelCase(data);

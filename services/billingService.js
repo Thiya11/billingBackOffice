@@ -7,7 +7,7 @@ const getAllBills = async () => {
 }
 
 const addNewBill = async (reqObj, res) => {
-    let billingDate       = new Date(reqObj.bill_date).toISOString().slice(0,19).replace('T', ' ');
+    let billingDate       = new Date(reqObj.bill_date);
     const billData        = await dbConnection.query(billingQueries.insertBill, [reqObj.user_id, billingDate, reqObj.total_price, reqObj.total_tax]);
     const billId          = billData[0].insertId;
     const unavailableItem = await itemAvailableCheck(reqObj.purchased_items);
@@ -38,7 +38,7 @@ const itemAvailableCheck = async (purchasedItems) => {
 
 const getBillById = async (billId) => {
     const [rows] = await dbConnection.query(billingQueries.getBillingDetailsById, billId);
-
+    console.log(rows[0], 'bill details')
     let reqObj = {
         billId: rows[0].bill_id,
         userId: rows[0].user_id,
@@ -55,6 +55,7 @@ const getBillById = async (billId) => {
             purchasedItemId: row.purchased_item_id,
             itemId: row.item_id,
             itemName: row.item_name,
+            category: row.category,
             pricePerItem: row.price_per_item,
             quantityType: row.quantity_type,
             quantity: row.quantity,
