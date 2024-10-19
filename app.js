@@ -10,6 +10,7 @@ const roleRoutes = require('./routes/roleRoutes');
 const inventoryRoutes = require('./routes/inventory');
 const billingRoutes = require('./routes/billingRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
+const graphRoutes = require('./routes/graphRoutes');
 const { registerNewUser } = require('./services/miscellaneous');
 const { convertIncomingFields, convertOutgoingFields, errorHandler } = require('./routes/middleware');
 
@@ -26,6 +27,7 @@ app.use('/roles',roleRoutes);
 app.use('/inventory', inventoryRoutes);
 app.use('/billing', billingRoutes);
 app.use('/transactions',transactionRoutes);
+app.use('/analysis',graphRoutes);
 
 //register new user API
 
