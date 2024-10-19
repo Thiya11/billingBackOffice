@@ -8,6 +8,7 @@ const getAllBills = async () => {
 
 const addNewBill = async (reqObj, res) => {
     let billingDate       = new Date(reqObj.bill_date);
+    console.log(billingDate)
     const billData        = await dbConnection.query(billingQueries.insertBill, [reqObj.user_id, billingDate, reqObj.total_price, reqObj.total_tax]);
     const billId          = billData[0].insertId;
     const unavailableItem = await itemAvailableCheck(reqObj.purchased_items);
