@@ -13,6 +13,7 @@ const transactionRoutes = require('./routes/transactionRoutes');
 const graphRoutes = require('./routes/graphRoutes');
 const { registerNewUser } = require('./services/miscellaneous');
 const { convertIncomingFields, convertOutgoingFields, errorHandler } = require('./routes/middleware');
+const { loginUser } = require('./services/userService');
 
 //added middlewares
 
@@ -39,7 +40,16 @@ app.post('/register', async (req,res)=> {
     console.log(err)
     res.status(404).send({"error":"Unable to register user"})
    }
-}) 
+})
+
+app.get('/guestMode',async(req, res) => {
+    let guestObj = {
+        email:process.env.GUEST_EMAIL,
+        password:process.env.GUEST_PASSWORD,
+        type:process.env.GUEST_TYPE
+    }
+    await loginUser(guestObj, res);
+})
 
 app.use(errorHandler);
 
